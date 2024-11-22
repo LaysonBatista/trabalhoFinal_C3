@@ -1,0 +1,37 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Explicação do código",
+  "steps": [
+    {
+      "file": "trabalho_final.py",
+      "description": "Constante \"RED\", serve para destacar uma parte de texto com uma cor especifica, durante a execução do programa (no prompt).\r\nEX: coloque o \"RED\" para indicar o começo da marcação do texto e o \"RESET\" para finalizar a marcação.\r\nobs1: caso não utilize a constante \"RESET\" todo os proximos textos no prompt ficarão com a cor vermelho. ",
+      "line": 2
+    },
+    {
+      "file": "trabalho_final.py",
+      "description": "Implementar \"update\"",
+      "line": 86
+    },
+    {
+      "file": "trabalho_final.py",
+      "description": "Função \"criar_surfista\", usada para fazer cadastro de surfistas na lista surfistas.",
+      "line": 16
+    },
+    {
+      "file": "trabalho_final.py",
+      "description": "A função \"replace\" tira os \"espcaços\" de nomes compostos. EX: nome = \"Lucas Amorin\"  nome.replace(\" \", \"\") = \"LucasAmorin\"\r\nTraduzindo para melhor compreensão: replace(\" \", \"\") = troca espaços por (\"\") nada. \r\nPara que isso serve? Para a função \"isalpha\" verificar se o nome informado contem apenas letras.\r\nA função \"isalpha\" não considera \"espaços\" como letra.\r\n\r\nSe a função isalpha só encontrar letras ela retorna \"True\", se ele encontrar algum outro tipo de caracter ele retorna \"False\".\r\nOu seja, if not pais.replace(\" \", \"\").isalpha() =  se for detectado um nome com númneros / caracteres especiais será usado o \"raise ValueError\"\r\n\r\nO que ele faz? O \"raise ValueError\" é responsalve por \"gerar um erro\" de proposito.\r\nUai, mas para que? Para \"quebrar o try\" e fazer o programa executar o \"except\".\r\n\r\nO \"except\" só é executado se o ocorrer um erro no try.\r\n\r\nOu seja, o programa ira emitir uma menssagem de erro no prompt até o usuário informar o nome de forma correta.",
+      "line": 23
+    },
+    {
+      "file": "trabalho_final.py",
+      "description": "O \"enumerate\" possibilita acessar index e valor de uma lista com as variaveis declaradas no for, nesse caso, \"i\" para index e \"valor\" para valor.",
+      "line": 54
+    },
+    {
+      "file": "trabalho_final.py",
+      "description": "Função \"erro_tipo_dado\", usada para indicar um erro durante a inserção de dados.\r\nEX: colocar números em um \"input\" que deve receber somente \"Strings\".",
+      "line": 14
+    }
+  ],
+  "ref": "4e2d9bf16fbfc4d37814adb9102b5a7b492e2577"
+}
