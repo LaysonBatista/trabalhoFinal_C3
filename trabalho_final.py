@@ -52,22 +52,36 @@ def atualizar_surfistas():
     if not surfistas:
         return print(f'\n{RED}Nenhum surfista foi cadastrado para atualizar.{RESET}')
 
-    print('--- Atualizar surfista ---')
+    print('\n------ Atualizar Notas dos Surfistas ------')
     listar_surfistas()
     while True:
         try:
             busca = int(input('\nInforme a posição (número) do surfista que deseja atualizar a nota: ')) - 1
             if busca < 0 or busca >= len(surfistas):
                 raise IndexError(f'Erro: Não existe surfista na posição {busca + 1}.')
-            print(f'{BLUE}\nSurfista selecionado: {surfistas[busca][0]} - Notas: {bateria1[busca][1]}, {bateria1[busca][2]}{RESET}')
-            atualizar_nota = int(input('Qual nota deseja atualizar?\nDigite (1) para 1ª nota\nDigite (2) para 2ª nota\nEscolha uma opção: '))
-            if atualizar_nota not in [1, 2]:
+            print(f'{BLUE}\nSurfista selecionado: {surfistas[busca][0]} - Bateria 1: 1º Nota: {bateria1[busca][1]}, {bateria1[busca][2]}{RESET}')
+            bateria = int(input('\nInforme sobre qual bateria deseja atualizar a nota.\nDigite (1) para BATERIA 1.\nDigite (2) para BATERIA 2.\nInforme: '))
+
+            if bateria == 1: 
+                atualizar_nota = int(input('Qual nota deseja atualizar?\nDigite (1) para 1ª nota\nDigite (2) para 2ª nota\nEscolha uma opção: '))
+                if atualizar_nota not in [1, 2]:
+                    raise ValueError('Opção inválida. Escolha (1) ou (2).')
+                nova_nota = float(input(f'Informe a nova nota {atualizar_nota}: '))
+                bateria1[busca][atualizar_nota] = nova_nota
+                print(f"\n{GREEN}Nota atualizada com sucesso!{RESET}")
+                print(f"Novas notas do surfista \"{surfistas[busca][0]}\": {bateria1[busca][1]}, {bateria1[busca][2]}")
+                return
+            elif bateria == 2: 
+                atualizar_nota = int(input('Qual nota deseja atualizar?\nDigite (1) para 1ª nota\nDigite (2) para 2ª nota\nEscolha uma opção: '))
+                if atualizar_nota not in [1, 2]:
+                    raise ValueError('Opção inválida. Escolha (1) ou (2).')
+                nova_nota = float(input(f'Informe a nova nota {atualizar_nota}: '))
+                bateria2[busca][atualizar_nota] = nova_nota
+                print(f"\n{GREEN}Nota atualizada com sucesso!{RESET}")
+                print(f"Novas notas do surfista \"{surfistas[busca][0]}\": {bateria2[busca][0]}, {bateria2[busca][1]}")
+                return
+            else:
                 raise ValueError('Opção inválida. Escolha (1) ou (2).')
-            nova_nota = float(input(f'Informe a nova nota {atualizar_nota}: '))
-            bateria1[busca][atualizar_nota] = nova_nota
-            print(f"\n{GREEN}Nota atualizada com sucesso!{RESET}")
-            print(f"Novas notas do surfista \"{surfistas[busca][0]}\": {bateria1[busca][1]}, {bateria1[busca][2]}")
-            return
         except ValueError as e:
             print(f"{RED}Erro: {e}{RESET}")
         except IndexError as e:
@@ -102,6 +116,64 @@ def buscar_surfista():
         print(f"\n{RED}Nenhum surfista com o nome '{nome_buscado}' foi encontrado.{RESET}")
 
 
+def cal_resultado():
+    if not surfistas or len(bateria1) != len(surfistas) or len(bateria2) != len(surfistas):
+        print(f'{RED}Erro: Certifique-se de que as listas de surfistas e notas estão completas e consistentes.{RESET}')
+        return
+    resultado = []
+    for i in range(len(surfistas)):
+        bateria1[i].pop(0) #Necessario retirar o primero valor, o primeiro valor é referente ao index do surfista, isso estava interferindo no resultado final
+        bateria2[i].pop(0)
+        nome = surfistas[i]
+        soma_notas = sum(bateria1[i])+sum(bateria2[i])
+        media = soma_notas/4 
+        resultado.append([nome,media]) #Adicionado "[]", o "append" só pode receber um argumento/parametro por vez, usando "[]" ele entende como se fosse uma coisa só.
+
+        resultado.sort(key=lambda x: x[1], reverse=True)
+
+        print('=== RESULTADO FINAL ===')
+        print("== RESULTADO FINAL ==")
+    for posicao, (nome, media) in enumerate(resultado[:3], start=1): 
+        print(f"{posicao}º lugar: {GRAY}{nome}{RESET} com média {media:.2f}")
+    print("Parabéns aos vencedores!")
+
+def pesquisa():
+    if not surfistas:
+        print(f'\n{RED}Nenhum surfista foi cadastrado para filtrar.{RESET}') #Se não tiver surfista, não tem filtro.
+        return
+    
+    maiorB1 = max(bateria1)
+    menorB1 = min(bateria1) #Movi as variaveis para dentro da função. Sem passar elas como parametro para a função o python não reconhece a chamada dela dentro da função, estando dentro já resolve.
+    maiorB2 = max(bateria2)
+    menorB2 = min(bateria2)
+    while True:
+        try:
+            entrada =int(input('Deseja saber quais dados referente a competição?\nDigite (1) para Parcial das baterias. Digite (2) para o resultado do torneio: '))
+            if entrada == 1:
+                surch = int(input('--- PARCIAL ---\nPara vizualizar a parcial da BATERIA 1, digite(1)\nPara vizualizar a parcial da BATERIA 2, digite(2)'))
+                if surch == 1:
+                    for i , valor in enumerate(surfistas):
+                        print('== Parcial da 1ª BATERIA ==')
+                        print(f"{i+1}. {GRAY}{surfistas[i][0]} - 1º nota: {bateria1[i][1]} - 2º nota: {bateria1[i][2]}{RESET}") #Necessario especificar a posição das notas dentro da matriz bateria. Ex: bateria[i] nota [1] já que 0 é o index do surfista.
+                        print(f'Total de competidores: {len(surfistas)}')
+                        print(f'Maior nota da bateria: {maiorB1}')
+                        print(f'Menor nota da bateria: {menorB1}')
+                elif surch == 2:
+                    for i , valor in enumerate(surfistas):
+                        print('== Parcial da 2ª BATERIA ==')
+                        print(f"{i+1}. {GRAY}{surfistas[i][0]} - 1º nota: {bateria2[i][1]} - 2º nota: {bateria2[i][2]}{RESET}")
+                        print(f'Total de competidores: {len(surfistas)}')
+                        print(f'Maior nota da bateria: {maiorB2}')
+                        print(f'Menor nota da bateria: {menorB2}')
+                else:
+                    raise ValueError('Opção inválida. Escolha (1) ou (2).')
+            elif entrada == 2:
+                cal_resultado()
+                break
+            else:
+                raise ValueError('Opção inválida. Escolha (1) ou (2).')             
+        except ValueError as e:
+            print(f"{RED}Erro: {e}{RESET}")
 
 
 def menu():
@@ -119,12 +191,13 @@ def menu():
                 print("2. Listar Surfistas")
                 print("3. Atualizar Notas dos Surfistas")
                 print("4. Buscar Surfistas")
-                print("5. Voltar")
+                print("5. Filtrar")
+                print("6. Voltar")
                 sub_opcao = input("Escolha uma opção: ")
 
                 if sub_opcao == "1":
                     criar_surfista()
-                    print("\n> Agora informe as notas de cada surfista cadastrado:")
+                    print("\n> Agora informe as notas dos surfistas cadastrados para cada bateria:")
                     for i in range(ultimo_cadastro, len(surfistas)):
                         while True: 
                             try: 
@@ -136,6 +209,7 @@ def menu():
                                 b2nota1 = float(input(f"Informe a 1º nota de \"{surfistas[i][0]}\": "))
                                 b2nota2 = float(input(f"Informe a 2º nota de \"{surfistas[i][0]}\": "))
                                 bateria2.append([i,b2nota1,b2nota2])
+                                print(f"\n{GREEN}Notas de \"{surfistas[i][0]}\" Armazenadas com sucesso!{RESET}")
                                 break
                             except:
                                 erro_tipo_dado()
@@ -146,8 +220,10 @@ def menu():
                 elif sub_opcao == "3":
                     atualizar_surfistas()
                 elif sub_opcao == "4":
-                    buscar_surfista()                   
+                    buscar_surfista()  
                 elif sub_opcao == "5":
+                    pesquisa()                 
+                elif sub_opcao == "6":
                     break
                 else:
                     print(f"\n{RED}Opção inválida. Tente novamente{RESET}")
